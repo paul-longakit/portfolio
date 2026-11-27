@@ -5,94 +5,179 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="description" content="Paul Longakit's portfolio: backend development, team projects, and hands-on engineering.">
   <title>Paul Longakit — Developer Portfolio</title>
+  <script>
+    (() => {
+      if (!("IntersectionObserver" in window) || matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+      const page = document.documentElement;
+      page.dataset.buildMotion = "pending";
+      // Fail open if a script is blocked or never loads.
+      setTimeout(() => {
+        if (page.dataset.buildMotion === "pending") delete page.dataset.buildMotion;
+      }, 1500);
+      document.addEventListener("click", ({ target }) => {
+        if (page.dataset.buildMotion !== "pending" || !target.matches(".motion-skip")) return;
+        delete page.dataset.buildMotion;
+        target.textContent = "Animation skipped";
+        target.setAttribute("aria-disabled", "true");
+      });
+    })();
+  </script>
   <link rel="stylesheet" href="styles.css">
-  <script defer src="https://cdn.jsdelivr.net/npm/animejs@3.2.2/lib/anime.min.js"></script>
+  <script defer src="vendor/animejs/anime.min.js"></script>
   <script defer src="animations.js"></script>
 </head>
 <body>
+  <svg class="sprite" aria-hidden="true" width="0" height="0">
+    <symbol id="mushroom-worker" viewBox="0 0 48 48">
+      <ellipse cx="24" cy="43" rx="18" ry="3" fill="#111019" opacity=".5"/>
+      <path d="M16 33v8m16-8v8M15 30l-6 4m24-4 6 4" stroke="#e4ceb9" stroke-width="4" stroke-linecap="round"/>
+      <rect x="14" y="19" width="20" height="20" rx="8" fill="#fff0d9"/>
+      <path d="M3 24C4 12 13 4 24 4s20 8 21 20c-9 4-33 4-42 0Z" fill="currentColor"/>
+      <g fill="#fff0d9"><circle cx="15" cy="15" r="3"/><circle cx="27" cy="10" r="3"/><circle cx="35" cy="18" r="3"/></g>
+      <g fill="#30213e"><circle cx="20" cy="31" r="1.4"/><circle cx="28" cy="31" r="1.4"/></g>
+    </symbol>
+  </svg>
   <a class="skip" href="#main">Skip to content</a>
-  <header class="wrap site-header">
-    <a class="brand" href="#top">PL<span>.</span></a>
-    <nav aria-label="Main navigation">
-      <a href="#work">Work</a>
-      <a href="#experience">Experience</a>
-      <a href="#contact">Contact</a>
+  <button class="motion-skip" type="button">Skip animation</button>
+  <header class="wrap site-header" data-build-scene data-build="frame">
+    <a class="brand" href="#top" data-build="type">PL<span>.</span></a>
+    <nav aria-label="Main navigation" data-build="frame">
+      <a href="#work" data-build>Work</a>
+      <a href="#experience" data-build>Experience</a>
+      <a href="#contact" data-build>Contact</a>
     </nav>
   </header>
 
   <main id="main" class="wrap">
-    <section class="hero" id="top" aria-labelledby="name">
-      <p class="label">Computer science student · Cavite, Philippines</p>
-      <h1 id="name">Paul<br>Longakit<span>.</span></h1>
-      <p class="intro">I study Computer Science at Cavite State University – Carmona Campus. I’m focused on backend and full-stack development, especially building REST APIs and working with relational databases.</p>
-      <div class="actions">
-        <a class="button primary" href="#work">Explore my work <span aria-hidden="true">↓</span></a>
-        <a class="button" href="#contact">Get in touch</a>
+    <section class="hero" id="top" aria-labelledby="name" data-build-scene data-build="frame">
+      <div class="hero-copy" data-build-scene>
+        <p class="label" data-build>Computer science student · Cavite, Philippines</p>
+        <h1 id="name" data-build="type">Paul<br>Longakit<span>.</span></h1>
+        <p class="intro" data-build>I study Computer Science at Cavite State University – Carmona Campus. I’m focused on backend and full-stack development, especially building REST APIs and working with relational databases.</p>
+        <div class="actions" data-build="frame">
+          <a class="button primary" href="#work" data-build>Explore my work <span aria-hidden="true">↓</span></a>
+          <a class="button" href="#contact" data-build>Get in touch</a>
+        </div>
+      </div>
+      <div class="workshop" data-build-scene data-build="frame" aria-hidden="true">
+        <p class="label" data-build="type">The mushroom workshop</p>
+        <div class="build-row" data-build="frame">
+          <svg class="worker" viewBox="0 0 48 48"><use href="#mushroom-worker"/></svg>
+          <span class="build-piece" data-build>01 / Projects</span>
+        </div>
+        <div class="build-row" data-build="frame">
+          <svg class="worker" viewBox="0 0 48 48"><use href="#mushroom-worker"/></svg>
+          <span class="build-piece" data-build>02 / Experience</span>
+        </div>
+        <div class="build-row" data-build="frame">
+          <svg class="worker" viewBox="0 0 48 48"><use href="#mushroom-worker"/></svg>
+          <span class="build-piece" data-build>03 / Toolkit</span>
+        </div>
       </div>
     </section>
 
-    <section id="work" aria-labelledby="work-title">
-      <p class="label">01 / Selected work</p>
-      <h2 id="work-title">Featured projects</h2>
+    <section id="work" aria-labelledby="work-title" data-build-scene data-build="frame">
+      <div>
+        <p class="label" data-build>01 / Selected work</p>
+        <h2 id="work-title" data-build="type">Featured projects</h2>
+      </div>
       <div class="projects">
-        <article class="card featured">
-          <p class="label">Team lead · 2025–2026</p>
-          <h3>CHRIMS</h3>
-          <p class="subtitle">Computer Hardware Retail &amp; Inventory Management System</p>
-          <p>I led a 10-person team building a full-stack retail platform with inventory management and two-factor verification using one-time passwords. The project received an 87.8% user satisfaction rating.</p>
+        <article class="card featured" data-build-scene data-build="frame">
+          <p class="label" data-build>Featured case study · 2025–2026</p>
+          <h3 data-build="type">CHRIMS</h3>
+          <p class="subtitle" data-build>Computer Hardware Retail &amp; Inventory Management System</p>
+          <div class="case-study">
+            <dl class="case-notes">
+              <div data-build-scene data-build="frame">
+                <dt data-build="type">The problem</dt>
+                <dd data-build>Computer hardware retail needs a way to manage inventory alongside day-to-day retail operations.</dd>
+              </div>
+              <div data-build-scene data-build="frame">
+                <dt data-build="type">My role</dt>
+                <dd data-build>I led the 10-person development team.</dd>
+              </div>
+              <div data-build-scene data-build="frame">
+                <dt data-build="type">What we built</dt>
+                <dd data-build>Our team built a full-stack platform that combined retail and inventory management, with two-factor verification using one-time passwords.</dd>
+              </div>
+            </dl>
+            <div class="case-result" data-build-scene data-build="frame">
+              <span class="label" data-build>Project outcome</span>
+              <strong data-build="stamp">87.8%</strong>
+              <span data-build>User satisfaction rating</span>
+            </div>
+          </div>
         </article>
-        <article class="card">
-          <p class="label">Game artist &amp; animator · 2025–2026</p>
-          <h3>Ultima Spes</h3>
-          <p>As part of Team Starforge, I co-designed an action-adventure survival game with civilian rescue mechanics and contributed art and animation.</p>
-          <ul class="tags" aria-label="Project skills"><li>Godot 4.6</li><li>Game art</li><li>Animation</li></ul>
+        <article class="card" data-build-scene data-build="frame">
+          <p class="label" data-build>Game artist &amp; animator · 2025–2026</p>
+          <h3 data-build="type">Ultima Spes</h3>
+          <ul class="details">
+            <li data-build><strong>Build:</strong> An action-adventure survival game with civilian rescue mechanics.</li>
+            <li data-build><strong>Contribution:</strong> Co-designed the game and created art and animation with Team Starforge.</li>
+          </ul>
+          <ul class="tags" aria-label="Project skills"><li data-build>Godot 4.6</li><li data-build>Game art</li><li data-build>Animation</li></ul>
         </article>
-        <article class="card">
-          <p class="label">Research team member · 2023</p>
-          <h3>CLOTHGENT</h3>
-          <p>Our team built a prototype that detects rain and retracts a clothesline automatically. I implemented the main control loop in C++ using Arduino, coordinating sensor readings, heating, and the mechanism that extends and retracts the clothesline. I also helped wire the electronics and test the sensors.</p>
-          <ul class="tags" aria-label="Project skills"><li>C++</li><li>Arduino</li><li>Embedded control</li></ul>
+        <article class="card" data-build-scene data-build="frame">
+          <p class="label" data-build>Research team member · 2023</p>
+          <h3 data-build="type">CLOTHGENT</h3>
+          <ul class="details">
+            <li data-build><strong>Build:</strong> A prototype that detects rain and automatically retracts a clothesline.</li>
+            <li data-build><strong>Contribution:</strong> Wrote the Arduino control loop for sensors, heating, and clothesline movement; helped wire the electronics and test the sensors.</li>
+          </ul>
+          <ul class="tags" aria-label="Project skills"><li data-build>C++</li><li data-build>Arduino</li><li data-build>Embedded control</li></ul>
         </article>
       </div>
     </section>
 
-    <section id="experience" aria-labelledby="experience-title">
-      <p class="label">02 / Experience</p>
-      <h2 id="experience-title">Internship</h2>
-      <article class="card">
-        <p class="label">June–August 2026 · Silang, Cavite</p>
-        <h3>Associate Software Engineer Intern</h3>
-        <p class="subtitle">OPSOLUTIONS PH, INC. · 252.5 hours</p>
+    <section id="experience" aria-labelledby="experience-title" data-build-scene data-build="frame">
+      <div>
+        <p class="label" data-build>02 / Experience</p>
+        <h2 id="experience-title" data-build="type">Internship</h2>
+      </div>
+      <article class="card" data-build-scene data-build="frame">
+        <p class="label" data-build>June–August 2026 · Silang, Cavite</p>
+        <h3 data-build="type">Associate Software Engineer Intern</h3>
+        <p class="subtitle" data-build>OPSOLUTIONS PH, INC. · 252.5 hours</p>
         <ul class="details">
-          <li>Built REST APIs for a project management SaaS platform using C#, ASP.NET Core, and Clean Architecture.</li>
-          <li>Worked on 25+ backend modules and refactored and validated 17+ endpoints during a database redesign.</li>
-          <li>Worked with PostgreSQL schemas, migrations, and relational queries using Entity Framework Core.</li>
+          <li data-build>Built REST APIs for a project management SaaS platform using C#, ASP.NET Core, and Clean Architecture.</li>
+          <li data-build>Worked on 25+ backend modules and refactored and validated 17+ endpoints during a database redesign.</li>
+          <li data-build>Worked with PostgreSQL schemas, migrations, and relational queries using Entity Framework Core.</li>
         </ul>
       </article>
     </section>
 
-    <section aria-labelledby="skills-title">
-      <p class="label">03 / Toolkit</p>
-      <h2 id="skills-title">Technical skills</h2>
-      <dl class="skills">
-        <div><dt>Backend &amp; data</dt><dd>C#, ASP.NET Core, Entity Framework Core, REST APIs, PostgreSQL, MySQL</dd></div>
-        <div><dt>Other languages &amp; frameworks</dt><dd>PHP, Laravel, JavaScript, Python, C++</dd></div>
-        <div><dt>Tools &amp; workflows</dt><dd>Git, GitLab, Jira, VS Code, Godot, Arduino</dd></div>
-      </dl>
+    <section id="toolkit" aria-labelledby="skills-title" data-build-scene data-build="frame">
+      <div>
+        <p class="label" data-build>03 / Toolkit</p>
+        <h2 id="skills-title" data-build="type">Technical skills</h2>
+      </div>
+      <div class="skills">
+        <div data-build-scene data-build="frame">
+          <dl><dt data-build="type">Backend &amp; data</dt><dd data-build>C#, ASP.NET Core, Entity Framework Core, REST APIs, PostgreSQL, MySQL</dd></dl>
+        </div>
+        <div data-build-scene data-build="frame">
+          <dl><dt data-build="type">Other languages &amp; frameworks</dt><dd data-build>PHP, Laravel, JavaScript, Python, C++</dd></dl>
+        </div>
+        <div data-build-scene data-build="frame">
+          <dl><dt data-build="type">Tools &amp; workflows</dt><dd data-build>Git, GitLab, Jira, VS Code, Godot, Arduino</dd></dl>
+        </div>
+      </div>
     </section>
 
-    <section id="contact" aria-labelledby="contact-title">
-      <p class="label">04 / Contact</p>
-      <h2 id="contact-title">Let’s connect</h2>
-      <p>Want to talk about a project or get in touch? You can find me here:</p>
-      <div class="actions">
-        <a class="button primary" href="mailto:evanlongakit@gmail.com">Email me</a>
-        <a class="button" href="https://github.com/paul-longakit">GitHub</a>
-        <a class="button" href="https://www.linkedin.com/in/paul-evan-longakit-89513b401">LinkedIn</a>
+    <section id="contact" aria-labelledby="contact-title" data-build-scene data-build="frame">
+      <p class="label" data-build>04 / Contact</p>
+      <h2 id="contact-title" data-build="type">Let’s connect</h2>
+      <p data-build>Want to talk about a project or get in touch? You can find me here:</p>
+      <div class="actions" data-build="frame">
+        <a class="button primary" href="mailto:evanlongakit@gmail.com" data-build>Email me</a>
+        <a class="button" href="https://github.com/paul-longakit" data-build>GitHub</a>
+        <a class="button" href="https://www.linkedin.com/in/paul-evan-longakit-89513b401" data-build>LinkedIn</a>
       </div>
     </section>
   </main>
 
-  <footer class="wrap">Paul Longakit <a href="#top">Back to top ↑</a></footer>
+  <footer class="wrap" data-build-scene data-build="frame">
+    <span data-build="type">Paul Longakit</span> <a href="#top" data-build>Back to top ↑</a>
+  </footer>
 </body>
 </html>
