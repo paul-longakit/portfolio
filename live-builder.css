@@ -1,0 +1,172 @@
+.live-builder {
+  display: grid;
+  align-items: center;
+  gap: 1.5rem 3rem;
+}
+.builder-copy p:not(.label) { max-width: 33ch; }
+.builder-control {
+  padding: .4rem .8rem;
+  border: 1px solid var(--line);
+  border-radius: .5rem;
+  background: var(--surface);
+  color: var(--text);
+  font: inherit;
+  cursor: pointer;
+}
+.builder-window {
+  margin: 0;
+  min-width: 0;
+  overflow: hidden;
+  border: 1px solid #695b48;
+  border-radius: .9rem;
+  background: #171d19;
+  color: #fae9c7;
+  font: 600 clamp(.65rem, 2vw, .8rem)/1.3 ui-monospace, monospace;
+}
+.builder-chrome {
+  display: flex;
+  align-items: center;
+  gap: .75rem;
+  padding: .65rem .85rem;
+  background: #2d2923;
+  border-bottom: 1px solid #695b48;
+}
+.builder-chrome i {
+  width: .42rem;
+  height: .42rem;
+  margin-right: .95rem;
+  border-radius: 50%;
+  background: #df806b;
+  box-shadow: .55rem 0 #e3bd7c, 1.1rem 0 #b4cc91;
+}
+.builder-viewport {
+  position: relative;
+  display: grid;
+  padding-bottom: .75rem;
+  overflow: hidden;
+}
+.builder-palette, .builder-cursor, .builder-sprite { position: absolute; inset: 0; }
+.builder-scene {
+  --slot-y: 56%;
+  --source-x: 18%;
+  --target-x: 57%;
+  position: relative;
+  aspect-ratio: 2.15;
+  background: #222921;
+}
+.builder-palette {
+  background: radial-gradient(ellipse at 56% 49%, #425a3b, #1c2b25 73%);
+}
+.builder-scene::after {
+  position: absolute;
+  inset: 0;
+  content: "";
+  background: radial-gradient(circle, #ddd3a536 1px, transparent 1px) 0 0 / 13px 13px;
+  pointer-events: none;
+}
+.builder-coordinate, .builder-biome, .builder-slot, .builder-project, .builder-spores {
+  position: absolute;
+  z-index: 1;
+}
+.builder-coordinate { top: 9%; left: 5%; color: #d1d2aa; }
+.builder-biome {
+  display: flex;
+  gap: .42rem;
+  top: 12%;
+  right: 5%;
+  align-items: center;
+  transform: translateY(-50%);
+  border: 1px solid #a9a781;
+  border-radius: 2rem;
+  padding: .15rem .28rem .15rem .52rem;
+  color: #e8dfbe;
+  background: #282d24;
+}
+.builder-glow {
+  position: relative;
+  isolation: isolate;
+  border-radius: 2rem;
+  padding: .19rem .4rem;
+  color: #e7f6b3;
+}
+.builder-glow-light {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  border: 1px solid #c3dc86;
+  border-radius: inherit;
+  background: #495837;
+}
+.builder-slot {
+  top: var(--slot-y);
+  width: 23%;
+  aspect-ratio: 1;
+  transform: translate(-50%, -50%);
+  border: 1px dashed #b1bc8794;
+  border-radius: .65rem;
+}
+.builder-source { left: var(--source-x); background: #1b221d80; }
+.builder-target { left: var(--target-x); background: #a9d08012; }
+.builder-snap {
+  position: absolute;
+  inset: -1px;
+  border: 2px solid #d9ed9d;
+  border-radius: inherit;
+  opacity: 0;
+}
+.builder-sprite { z-index: 2; transform: translate3d(var(--target-x), var(--slot-y), 0); pointer-events: none; }
+.builder-sprite svg {
+  position: absolute;
+  width: 22%;
+  max-width: 7rem;
+  transform: translate(-50%, -50%);
+}
+.builder-spores {
+  left: var(--target-x);
+  top: var(--slot-y);
+  width: 33%;
+  transform: translate(-50%, -50%);
+}
+.builder-project {
+  position: relative;
+  margin-inline: 5%;
+  min-width: 0;
+  display: grid;
+  gap: .12rem;
+  padding: .3rem .6rem;
+  border: 1px solid #83936b;
+  border-radius: .4rem;
+  background: #222b21;
+}
+.builder-project > span { color: #cadd9b; }
+.builder-type { position: relative; color: #fff4d5; font-weight: 700; overflow-wrap: anywhere; }
+.builder-title { font-weight: inherit; }
+.builder-letters { position: absolute; inset: 0; pointer-events: none; user-select: none; }
+.builder-cursor { z-index: 3; opacity: 0; pointer-events: none; }
+.builder-hand {
+  /* The SVG tip is (3, 2) in a 28-unit viewBox rendered at 1.4rem. */
+  position: absolute;
+  top: -.1rem;
+  left: -.15rem;
+  display: flex;
+  align-items: flex-start;
+  transform-origin: .15rem .1rem;
+}
+.builder-hand svg { width: 1.4rem; flex: none; }
+.builder-hand span {
+  position: absolute;
+  top: 1.15rem;
+  right: .72rem;
+  padding: .18rem .45rem;
+  border: 1px solid #533a2b;
+  border-radius: 1rem;
+  white-space: nowrap;
+  background: #ffedc9;
+  color: #30261d;
+}
+@media (prefers-reduced-motion: reduce) {
+  .builder-control { display: none; }
+}
+@media (min-width: 48rem) {
+  .live-builder { grid-template-columns: minmax(0, 1fr) minmax(0, 1.45fr); }
+}

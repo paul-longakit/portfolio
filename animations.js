@@ -13,6 +13,7 @@
   const frameSelector = '[data-build="frame"]';
   const skip = document.querySelector(".motion-skip");
   const sprite = document.querySelector(".workshop .worker");
+  const letterEase = anime.easing("easeOutExpo");
   const segmenter = typeof Intl.Segmenter === "function" ? new Intl.Segmenter(page.lang) : null;
   const colors = ["#f493ad", "#baa0ff", "#8bd8bc"];
   const compact = matchMedia("(max-width: 42rem)");
@@ -75,6 +76,7 @@
     scene.append(stage);
 
     const bounds = stage.getBoundingClientRect();
+    const size = worker.getBoundingClientRect().width;
     const relative = ({ left, top, width, height }) => ({
       x: left - bounds.left, y: top - bounds.top, width, height,
     });
@@ -86,6 +88,8 @@
     }));
 
     const events = [];
+    const movingGlyphs = new Set();
+    const props = document.createDocumentFragment();
     const frames = new Map();
     const route = [];
     let nextEvent = 0;
@@ -94,6 +98,20 @@
       easing: "easeOutCubic",
       update: ({ currentTime }) => {
         while (events[nextEvent]?.at <= currentTime) events[nextEvent++].run();
+        // Anime.js still owns the clock. Only touch letters in flight, not
+        // every pending or already placed glyph on every timeline tick.
+        for (const glyph of movingGlyphs) {
+          const progress = (currentTime - glyph.at) / glyph.duration;
+          if (progress >= 1) {
+            glyph.tile.style.opacity = "1";
+            glyph.tile.style.removeProperty("transform");
+            movingGlyphs.delete(glyph);
+          } else {
+            const eased = letterEase(progress);
+            glyph.tile.style.opacity = eased;
+            glyph.tile.style.transform = `translateY(${(1 - eased) * glyph.rise}px)`;
+          }
+        }
       },
       complete: done,
     });
@@ -107,7 +125,7 @@
         left: `${x}px`, top: `${y}px`, width: `${width}px`, height: `${height}px`,
       });
       element.textContent = text;
-      stage.append(element);
+      props.append(element);
       return element;
     }
 
@@ -146,25 +164,26 @@
       const split = glyphs.length > 80
         ? glyphs.findIndex(({ wordStart }, i) => i >= glyphs.length / 2 && wordStart)
         : -1;
-      const delays = glyphs.map((_, i) => split !== -1 && i >= split ? 140 + (i - split) * step : i * step);
+      // Keep the same stagger and settling time while avoiding a full-text
+      // Anime.js tween whose targets would be rewritten on every tick.
+      const display = target.matches('h1, h2, h3, [data-build="stamp"]');
+      const duration = display ? 320 : 190;
+      const rise = display ? 14 : 6;
+      let end = start;
       const tiles = glyphs.map(({ box, text, font, color }, i) => {
         const tile = prop("glyph", box, text);
         Object.assign(tile.style, { font, lineHeight: "1", color });
         tile.dataset.copy = target.id || (target.classList.contains("intro") ? "intro" : target.tagName.toLowerCase());
         const leadTrack = split === -1 || i < split;
+        const at = start + (leadTrack ? i * step : 140 + (i - split) * step);
+        const glyph = { tile, at, duration, rise };
+        onBeat(at, () => movingGlyphs.add(glyph));
+        end = Math.max(end, at + duration);
         if (leadTrack && i % (step === 35 ? 9 : 4) === 0) {
-          route.push({ at: start + delays[i], x: box.x, y: box.y + box.height });
+          route.push({ at, x: box.x, y: box.y + box.height });
         }
         return tile;
       });
-      const duration = 190;
-      add(tiles, start, {
-        translateY: [10, -2, 0],
-        opacity: [0, 1],
-        delay: (_, i) => delays[i],
-        duration,
-      });
-      const end = start + Math.max(...delays) + duration;
       onBeat(end, () => {
         target.classList.add("is-built");
         for (const tile of tiles) tile.remove();
@@ -202,7 +221,6 @@
     }
 
     // Give the worker one continuous route even when placements overlap.
-    const size = worker.getBoundingClientRect().width;
     const clamp = (value, max) => Math.max(0, Math.min(value, max));
     const position = ({ x, y }) => ({
       x: clamp(x, bounds.width - size), y: clamp(y - size * .7, bounds.height - size),
@@ -225,6 +243,7 @@
     }
     add(worker, end, { opacity: [1, 0], translateY: [from.y, from.y - 12], duration: 240 });
     events.sort((a, b) => a.at - b.at);
+    stage.append(props);
 
     return {
       play: () => timeline.play(),
